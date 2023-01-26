@@ -1,0 +1,90 @@
+﻿@page
+@model RegisterModel
+@using Utility
+@{
+    ViewData["Title"] = "Register - Instructor";
+}
+
+<section class="section">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-8 offset-xl-2">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h4>Register - Instructor</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" id="registerForm" asp-route-returnUrl="@Model.ReturnUrl">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            @if (User.IsInRole(SD.AdminRole))
+                            {
+                                <input name="role" id="role" value="Instructor" type="hidden" />
+                            }
+                            @if (User.IsInRole(SD.InstructorRole))
+                            {
+                                <input name="role" id="role" value="Student" type="hidden" />
+                            }
+                            @*<div class="row">
+                                <div class="form-group">
+                                    <label>Employee Type</label>
+                                    <div>
+                                        <select class="form-control select2" id="roles" name="roles">
+                                            <option value="Instructor">Instructor</option>
+                                            <option value="Student">Student</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>*@
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <label asp-for="Input.FirstName"></label>
+                                    <input type="text" asp-for="Input.FirstName" class="form-control" aria-required="true" autofocus>
+                                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-6">
+                                    <label asp-for="Input.LastName"></label>
+                                    <input type="text" asp-for="Input.LastName" class="form-control" aria-required="true">
+                                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.Email"></label>
+                                <input asp-for="Input.Email" type="email" class="form-control">
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.PhoneNumber"></label>
+                                <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="username" aria-required="true">
+                                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <label asp-for="Input.Password" class="d-block"></label>
+                                    <input type="password" class="form-control pwstrength" data-indicator="pwindicator"
+                                           asp-for="Input.Password" autocomplete="new-password" aria-required="true">
+                                    <div id="pwindicator" class="pwindicator">
+                                        <div class="bar"></div>
+                                        <div class="label"></div>
+                                    </div>
+                                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-6">
+                                    <label asp-for="Input.ConfirmPassword" class="d-block"></label>
+                                    <input asp-for="Input.ConfirmPassword" type="password" class="form-control" autocomplete="new-password" aria-required="true">
+                                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+                                <button type="submit" class="btn btn-primary me-md-2 px-5" id="registerSubmit">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,12 @@
+D:\RCKR\Development\RazorWebApplication\Utility\bin\Debug\net5.0\Utility.deps.json
+D:\RCKR\Development\RazorWebApplication\Utility\bin\Debug\net5.0\Utility.dll
+D:\RCKR\Development\RazorWebApplication\Utility\bin\Debug\net5.0\ref\Utility.dll
+D:\RCKR\Development\RazorWebApplication\Utility\bin\Debug\net5.0\Utility.pdb
+D:\RCKR\Development\RazorWebApplication\Utility\obj\Debug\net5.0\Utility.csproj.AssemblyReference.cache
+D:\RCKR\Development\RazorWebApplication\Utility\obj\Debug\net5.0\Utility.GeneratedMSBuildEditorConfig.editorconfig
+D:\RCKR\Development\RazorWebApplication\Utility\obj\Debug\net5.0\Utility.AssemblyInfoInputs.cache
+D:\RCKR\Development\RazorWebApplication\Utility\obj\Debug\net5.0\Utility.AssemblyInfo.cs
+D:\RCKR\Development\RazorWebApplication\Utility\obj\Debug\net5.0\Utility.csproj.CoreCompileInputs.cache
+D:\RCKR\Development\RazorWebApplication\Utility\obj\Debug\net5.0\Utility.dll
+D:\RCKR\Development\RazorWebApplication\Utility\obj\Debug\net5.0\ref\Utility.dll
+D:\RCKR\Development\RazorWebApplication\Utility\obj\Debug\net5.0\Utility.pdb

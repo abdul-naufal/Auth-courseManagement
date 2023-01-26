@@ -1,0 +1,166 @@
+﻿@page
+@model RazorWebApplication.Pages.Admin.IndexModel
+
+
+<section class="section">
+    <div class="row">
+        <div class="col m-0">
+            <h4 class="m-0 px-3">Instructor</h4>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-lg-9 col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Instrcutor</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="col-lg-3 col-md-3 mb-3">
+            <div class="btn-group dropleft pull-right mt-1">
+                <a href="#" class="text-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                <div class="dropdown-menu dropleft">
+                    <a href="#" class="dropdown-item has-icon"><i class="fa fa-download"></i> Download Report</a>
+                </div>
+            </div>
+            <a href="#" class="btn btn-primary pull-right">Create Instrcutor</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Instructor</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row bg-gray mb-3 pt-3">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="row">
+                                <div class="form-group col-lg-2 col-md-3">
+                                    <label for="InstructorID">Instrcutor ID</label>
+                                    <input type="text" name="InstructorID" class="form-control" id="InstructorID">
+                                </div>
+
+                                <div class="form-group col-lg-3 col-md-4">
+                                    <label for="InstructorName">Instructor Name</label>
+                                    <input type="text" name="InstructorName" class="form-control" id="InstructorName">
+                                </div>
+                                <div class="form-group col-lg-3 col-md-4">
+                                    <label for="InstructorEmail">Instructor Email</label>
+                                    <input type="text" name="InstructorEmail" class="form-control" id="InstructorEmail">
+                                </div>
+
+                                <div class="col-lg-2 col-md-2 mt-2">
+                                    <button class="mt-1 bg-secondary" id="searchButton" name="searchButton">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr id="InstructorHeading">
+                                    <th class="text-center pt-3">
+                                        <div class="custom-checkbox custom-checkbox-table custom-control">
+                                            <input type="checkbox"
+                                                   class="custom-control-input" id="instructor-select-all">
+                                            <label for="instructor-select-all" class="custom-control-label">&nbsp;</label>
+                                        </div>
+                                    </th>
+                                    <th class="min-width-50">Instructor ID</th>
+                                    <th class="min-width-200">Name</th>
+                                    <th class="min-width-100">Email</th>
+                                    <th class="min-width-100">Phone</th>
+                                    <th class="min-width-100">Action</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="instructorList">
+                                @foreach(var obj in Model.Instructors)
+                                {
+                                <tr>
+                                    <td class="text-center pt-2">
+                                        <div class="custom-checkbox custom-control">
+                                            <input type="checkbox" class="custom-control-input">
+                                            <label class="custom-control-label">&nbsp;</label>
+                                        </div>
+                                    </td>
+                                    <td class="min-width-50">@obj.Id</td>
+                                    <td class="min-width-200">
+                                        @if (@obj.ImageUrl != "")
+                                        {
+                                        <img alt="image" src="@obj.ImageUrl" width="35">
+                                        }
+                                        else {
+                                        <img src="~/images/schoolbg.png" width="35" class="rounded float-start w-100"/>
+                                        }
+
+                                        <a class="text-info">@obj.FirstName  @obj.LastName</a>
+                                    </td>
+                                    <td class="min-width-100">@obj.Email</td>
+                                    <td class="min-width-100">@obj.PhoneNumber</td>
+                                    <td class="min-width-100">
+
+                                        <a class="text-info font-28 p-r-5"> <i class="fa fa-pencil-square-o"></i></a>
+                                        <a class="text-danger font-28"> <i class="fa fa-trash-o"></i></a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-outline-primary">Detail</a>
+                                    </td>
+                                </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if (@Model.Instructors.Count() <= 0)
+                    {
+                        <div class="row" id="callout-warning">
+                            <div class="col">
+                                <div class="alert alert-light alert-has-icon">
+                                    <div class="alert-icon"><i class="fa fa-info-circle"></i></div>
+                                    <div class="alert-body">
+                                        <div class="alert-title">No Instructor available</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="row mt-3">
+                        <div class="col-sm-12 col-md-5">
+                            <div class="" id="showTableDataCount" *ngIf="count > 0">
+                                Listing per page:
+                                <select>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                </select>
+                                &nbsp;&nbsp;Showing 1 to 10 of 10 entries
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-7">
+                            <ul class="pagination">
+                                @for (var i = 1; i <= Model.TotalPages; i++)
+                                {
+                                <li class="page-item @(i == Model.CurrentPage ? " active" : "" )">
+                                    <a asp-page="/pagination" asp-route-currentpage="@i" class="page-link">@i</a>
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col text-center">
+            <button class="btn btn-warning" id="deleteSelected">Delete Selected</button>
+        </div>
+    </div>
+</section>

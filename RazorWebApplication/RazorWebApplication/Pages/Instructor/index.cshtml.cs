@@ -8,9 +8,10 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace RazorWebApplication.Pages.Admin
+namespace RazorWebApplication.Pages.Instructor
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin,Instructor")]
+    [Authorize(Roles = "Instructor")]
     public class IndexModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -33,11 +34,11 @@ namespace RazorWebApplication.Pages.Admin
         public bool ShowNext => CurrentPage < TotalPages;
         public bool ShowFirst => CurrentPage != 1;
         public bool ShowLast => CurrentPage != TotalPages;
-        public IEnumerable<InstructorUser> Instructors { get; set; }
+        public IEnumerable<ApplicationUser> Students { get; set; }
 
         public async Task OnGetAsync()
         {
-            Instructors = await GetPaginatedResult(CurrentPage, PageSize);
+            Students = await GetPaginatedResult(CurrentPage, PageSize);
             Count = await GetCount();
 
             if (Count < ((CurrentPage - 1) * PageSize + PageSize)) 
@@ -50,13 +51,12 @@ namespace RazorWebApplication.Pages.Admin
             }
         }
 
-        private async Task<IEnumerable<InstructorUser>> GetData()
+        private async Task<IEnumerable<ApplicationUser>> GetData()
         {
-            return _unitOfWork.InstructorUser.GetAll();
-
+            return _unitOfWork.ApplicationUser.GetAll();
         }
 
-        public async Task<IEnumerable<InstructorUser>> GetPaginatedResult(int currentPage, int pageSize = 10)
+        public async Task<IEnumerable<ApplicationUser>> GetPaginatedResult(int currentPage, int pageSize = 10)
         {
             var data = await GetData();
             return data.OrderBy(d => d.Id).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();

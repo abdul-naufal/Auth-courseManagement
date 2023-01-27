@@ -15,12 +15,19 @@
                     </div>
                     <div class="card-body">
                         <form method="POST" id="account">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            @if (!Model.IsValid)
+                            {
+                                <div class="row">
+                                    <div class="alert alert-danger p-0" role="alert">
+                                        <div asp-validation-summary="ModelOnly" class="global-error"></div>
+                                    </div>
+                                </div>
+                            }
                             <div class="form-group mb-3">
                                 <label asp-for="Input.Email"></label>
                                 <input type="email" class="form-control" tabindex="1" autofocus asp-for="Input.Email" autocomplete="username" aria-required="true">
                                 <span asp-validation-for="Input.Email" class="text-danger"></span>
-                                
+
                             </div>
                             <div class="form-group mb-3">
                                 <div class="d-flex justify-content-between">
@@ -68,7 +75,15 @@
                                         <div class="d-grid gap-2 mb-3">
                                             <button type="submit" class="border-0 bg-transparent" name="provider" value="@provider.Name">
                                                 <div class="card">
-                                                    <div class="row g-0">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text min-width-50" id="basic-addon1">
+                                                            <i class="fa @faIcon fs-5"></i>
+                                                        </span>
+                                                        <div class="card-body p-1">
+                                                            <p class="fs-5 mb-2 text-center ">@provider.DisplayName</p>
+                                                        </div>
+                                                    </div>
+                                                    @*<div class="row g-0">
                                                         <div class="col-md-2 vertical-align text-center bg-gray">
                                                             <span class="fa @faIcon fs-4 mt-2"></span>
                                                         </div>
@@ -77,7 +92,7 @@
                                                                 <p class="fs-5 mb-2 text-center ">@provider.DisplayName</p>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div>*@
                                                 </div>
                                             </button>
                                         </div>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Models;
+using Utility;
 
 namespace RazorWebApplication.Areas.Identity.Pages.Account
 {
@@ -21,6 +24,8 @@ namespace RazorWebApplication.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
+        readonly IUserStore<IdentityUser> _userStore;
+        private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
 
@@ -28,12 +33,14 @@ namespace RazorWebApplication.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
             ILogger<ExternalLoginModel> logger,
+            IUserStore<IdentityUser> userStore,
             IEmailSender emailSender)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
             _emailSender = emailSender;
+            _userStore = userStore;
         }
 
         [BindProperty]
@@ -46,11 +53,19 @@ namespace RazorWebApplication.Areas.Identity.Pages.Account
         [TempData]
         public string ErrorMessage { get; set; }
 
+        public string UserRole { get; set; }
+
         public class InputModel
         {
-            [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            [Required]
+            public string FirstName { get; set; }
+            [Required]
+            public string LastName { get; set; }
+            [Required]
+            public string PhoneNumber { get; set; }
         }
 
         public IActionResult OnGetAsync()
@@ -101,9 +116,37 @@ namespace RazorWebApplication.Areas.Identity.Pages.Account
                 {
                     Input = new InputModel
                     {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        FirstName = info.Principal.FindFirstValue(ClaimTypes.Name).Split(' ')[0],
+                        LastName = info.Principal.FindFirstValue(ClaimTypes.Name).Split(' ')[1]
                     };
+
+                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    if (user == null)
+                    {
+                        _logger.LogInformation("No email found with {email} email.", Input.Email);
+
+                        ErrorMessage = "No email found with " + Input.Email;
+                        TempData["error"] = ErrorMessage;
+                        return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+                    }
+
+                    var roles = await _userManager.GetRolesAsync(user);
+                    if (roles.Contains(SD.InstructorRole))
+                    {
+                        UserRole = SD.InstructorRole;
+                        Input.PhoneNumber = user.PhoneNumber;
+                    }
+                    else
+                    {
+                        UserRole = SD.StudentRole;
+                        ErrorMessage = "You have no access";
+                        TempData["error"] = ErrorMessage;
+                        user = user as ApplicationUser;
+                        return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+                    }
                 }
+
                 return Page();
             }
         }
@@ -121,38 +164,38 @@ namespace RazorWebApplication.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                InstructorUser user = (InstructorUser)await _userManager.FindByEmailAsync(Input.Email);
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+                user.PhoneNumber = Input.PhoneNumber;
 
-                var result = await _userManager.CreateAsync(user);
+                IdentityResult result = await _userManager.UpdateAsync(user);
+
                 if (result.Succeeded)
                 {
-                    result = await _userManager.AddLoginAsync(user, info);
-                    if (result.Succeeded)
-                    {
-                        _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+                    _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
-                        var userId = await _userManager.GetUserIdAsync(user);
-                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                        var callbackUrl = Url.Page(
-                            "/Account/ConfirmEmail",
-                            pageHandler: null,
-                            values: new { area = "Identity", userId = userId, code = code },
-                            protocol: Request.Scheme);
+                    //var userId = await _userManager.GetUserIdAsync(user);
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    //var callbackUrl = Url.Page(
+                    //    "/Account/ConfirmEmail",
+                    //    pageHandler: null,
+                    //    values: new { area = "Identity", userId = userId, code = code },
+                    //    protocol: Request.Scheme);
 
-                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                        // If account confirmation is required, we need to show the link if we don't have a real email sender
-                        if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                        {
-                            return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
-                        }
+                    //// If account confirmation is required, we need to show the link if we don't have a real email sender
+                    //if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    //{
+                    //    return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
+                    //}
 
-                        await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
+                    await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
 
-                        return LocalRedirect(returnUrl);
-                    }
+                    return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)
                 {
@@ -164,5 +207,14 @@ namespace RazorWebApplication.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
             return Page();
         }
-    }
+        
+        private IUserEmailStore<IdentityUser> GetEmailStore()
+        {
+            if (!_userManager.SupportsUserEmail)
+            {
+                throw new NotSupportedException("The default UI requires a user store with email support.");
+            }
+            return (IUserEmailStore<IdentityUser>)_userStore;
+        }
+    }       
 }

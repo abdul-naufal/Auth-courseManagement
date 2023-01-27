@@ -201,7 +201,6 @@ namespace RazorWebApplication.Areas.Identity.Pages.Account
                     {
                         TempData["success"] = "Instructor registered successfully";
                         return RedirectToPage("/Admin/Index");
-                        //return Page();
                     }
                     if (User.IsInRole(SD.InstructorRole))
                     {

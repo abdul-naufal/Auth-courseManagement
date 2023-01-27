@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Utility;
 
 namespace RazorWebApplication.Pages
 {
@@ -17,9 +18,16 @@ namespace RazorWebApplication.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            //return RedirectToPage("Instructor/Home/Index");
+            if(User.IsInRole(SD.AdminRole)) {
+                return RedirectToPage("/Admin/Index");
+            }
+            if (User.IsInRole(SD.InstructorRole))
+            {
+                return RedirectToPage("/Instructor/index");
+            }
+            return Page();
         }
     }
 }

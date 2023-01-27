@@ -486,3 +486,5 @@ D:\RCKR\Development\RazorWebApplication\RazorWebApplication\bin\Debug\net5.0\Mic
 D:\RCKR\Development\RazorWebApplication\RazorWebApplication\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.Google.dll
 D:\RCKR\Development\RazorWebApplication\RazorWebApplication\obj\Debug\net5.0\Razor\Pages\Admin\Login\Index.cshtml.g.cs
 D:\RCKR\Development\RazorWebApplication\RazorWebApplication\obj\Debug\net5.0\Razor\Pages\Admin\index.cshtml.g.cs
+D:\RCKR\Development\RazorWebApplication\RazorWebApplication\obj\Debug\net5.0\Razor\Pages\Instructor\index.cshtml.g.cs
+D:\RCKR\Development\RazorWebApplication\RazorWebApplication\obj\Debug\net5.0\Razor\Pages\Error404.cshtml.g.cs

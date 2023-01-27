@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32929.386
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorWebApplication", "RazorWebApplication\RazorWebApplication.csproj", "{7A079EB0-A456-4BF3-9C5A-26F227BC2280}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorWebApplication", "RazorWebApplication\RazorWebApplication.csproj", "{7A079EB0-A456-4BF3-9C5A-26F227BC2280}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{3C6DD7C1-0E71-4C1C-9C57-97468CF61B57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{3C6DD7C1-0E71-4C1C-9C57-97468CF61B57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{8E10271B-654C-48D4-B907-FAF6FD96E1F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{8E10271B-654C-48D4-B907-FAF6FD96E1F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{6AD6D967-43AE-46B8-92BD-6829153A62A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility", "Utility\Utility.csproj", "{6AD6D967-43AE-46B8-92BD-6829153A62A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
